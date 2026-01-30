@@ -11,7 +11,14 @@
 // 手機版水平滾動 snap
 // ============================================
 const initWorkMobileHorizontalScroll = () => {
+  // #region agent log
+  console.log('[DEBUG] initWorkMobileHorizontalScroll called');
+  // #endregion
+  
   const isMobile = window.matchMedia('(max-width: 767px)').matches;
+  // #region agent log
+  console.log('[DEBUG] isMobile:', isMobile);
+  // #endregion
   if (!isMobile) return;
 
   const list =
@@ -120,6 +127,10 @@ const initWorkMobileHorizontalScroll = () => {
 // 分類篩選 Smooth Scroll
 // ============================================
 const initWorkFilterNavigation = () => {
+  // #region agent log
+  console.log('[DEBUG] initWorkFilterNavigation called');
+  // #endregion
+  
   // Find filter links - they might be in various structures
   const filterLinks = Array.from(
     document.querySelectorAll('a[href*="#"]')
@@ -127,6 +138,10 @@ const initWorkFilterNavigation = () => {
     const href = link.getAttribute('href');
     return href && href.startsWith('#') && href.length > 1;
   });
+
+  // #region agent log
+  console.log('[DEBUG] Filter links found:', filterLinks.length, filterLinks.map(l => l.getAttribute('href')));
+  // #endregion
 
   if (!filterLinks.length) return;
 
@@ -137,6 +152,10 @@ const initWorkFilterNavigation = () => {
 
       const targetId = href.substring(1);
       const targetElement = document.getElementById(targetId);
+
+      // #region agent log
+      console.log('[DEBUG] Filter link clicked:', href, 'Target found:', !!targetElement);
+      // #endregion
 
       if (targetElement) {
         e.preventDefault();
@@ -159,15 +178,38 @@ const initWorkFilterNavigation = () => {
 // 導航點 (Navigation Dots)
 // ============================================
 const initWorkNavigationDots = () => {
+  // #region agent log
+  console.log('[DEBUG] initWorkNavigationDots called');
+  // #endregion
+  
   const dots = Array.from(document.querySelectorAll('.nav-line .nav-dot'));
-  if (!dots.length) return;
+  
+  // #region agent log
+  console.log('[DEBUG] Nav dots found:', dots.length);
+  // #endregion
+  
+  if (!dots.length) {
+    // #region agent log
+    console.log('[DEBUG] No nav dots found, exiting');
+    // #endregion
+    return;
+  }
 
   // Find all project items or sections to track
   const projectItems = Array.from(
     document.querySelectorAll('.project-item, .works-item, [data-nav-section]')
   );
 
-  if (!projectItems.length) return;
+  // #region agent log
+  console.log('[DEBUG] Project items found:', projectItems.length);
+  // #endregion
+
+  if (!projectItems.length) {
+    // #region agent log
+    console.log('[DEBUG] No project items found, exiting');
+    // #endregion
+    return;
+  }
 
   // Limit dots to match available items
   const count = Math.min(dots.length, projectItems.length);
@@ -192,6 +234,10 @@ const initWorkNavigationDots = () => {
         break;
       }
     }
+
+    // #region agent log
+    console.log('[DEBUG] updateActiveDot - scrollPos:', scrollPosition, 'activeIndex:', activeIndex, 'totalItems:', activeItems.length);
+    // #endregion
 
     // Update dot active state
     activeDots.forEach((dot, i) => {
@@ -235,7 +281,21 @@ const initWorkNavigationDots = () => {
 // Auto-initialize on DOMContentLoaded
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-  initWorkMobileHorizontalScroll();
-  initWorkFilterNavigation();
-  initWorkNavigationDots();
+  // #region agent log
+  console.log('[DEBUG] DOMContentLoaded fired - works.js initializing');
+  // #endregion
+  
+  try {
+    initWorkMobileHorizontalScroll();
+    initWorkFilterNavigation();
+    initWorkNavigationDots();
+    
+    // #region agent log
+    console.log('[DEBUG] All init functions completed successfully');
+    // #endregion
+  } catch (error) {
+    // #region agent log
+    console.error('[DEBUG] Error in init functions:', error.message, error.stack);
+    // #endregion
+  }
 });
