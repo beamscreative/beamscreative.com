@@ -20,7 +20,7 @@ const initHeroProject = () => {
   const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
   // ============================================
-  // DESKTOP VERSION - 點擊切換邏輯
+  // DESKTOP VERSION - 點擊切換邏輯-test
   // ============================================
   if (!isMobile) {
     let step = 0;
