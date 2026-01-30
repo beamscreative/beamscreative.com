@@ -1,0 +1,8 @@
+# Project documentation (local only)
+PROJECT.md
+
+# macOS
+.DS_Store
+
+# Cursor
+.cursor/
