@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
   const TABLET_BREAKPOINT = 991;
   const isDesktop = () => window.innerWidth > TABLET_BREAKPOINT;
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- 響應式處理 project-detail-info-wrapper ---
   // 桌面版：保持在 smooth-wrapper 外面，可以用 position: fixed
   // Tablet/Mobile：移進 smooth-content 裡面，跟隨滾動
-  const infoWrapper = document.querySelector('.project-detail-info-wrapper','.footer-wrapper');
+  const infoWrapper = document.querySelector('.project-detail-info-wrapper');
   const smoothContent = document.querySelector('.smooth-content');
   const mainGrid = document.querySelector('.main-grid'); // smooth-content 裡的目標位置
   
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const handleInfoWrapperPosition = () => {
       const isDesktop = window.innerWidth > TABLET_BREAKPOINT;
+      if (infoWrapper) infoWrapper.classList.toggle('is-desktop', isDesktop);
       
       if (!isDesktop && !isInsideSmoothContent) {
         // Tablet/Mobile：移進 smooth-content 裡面（main-grid 之前）
