@@ -3,10 +3,13 @@
  * Page ID: 654dddb7fac1a92339fe4eae
  * Path: /works
  * 
- * 功能: 手機版水平滾動 snap
+ * 功能: 手機版水平滾動 snap, 分類篩選, 導航點
  * 依賴: 無額外依賴
  */
 
+// ============================================
+// 手機版水平滾動 snap
+// ============================================
 const initWorkMobileHorizontalScroll = () => {
   const isMobile = window.matchMedia('(max-width: 767px)').matches;
   if (!isMobile) return;
@@ -113,5 +116,126 @@ const initWorkMobileHorizontalScroll = () => {
   });
 };
 
+// ============================================
+// 分類篩選 Smooth Scroll
+// ============================================
+const initWorkFilterNavigation = () => {
+  // Find filter links - they might be in various structures
+  const filterLinks = Array.from(
+    document.querySelectorAll('a[href*="#"]')
+  ).filter(link => {
+    const href = link.getAttribute('href');
+    return href && href.startsWith('#') && href.length > 1;
+  });
+
+  if (!filterLinks.length) return;
+
+  filterLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href || !href.startsWith('#')) return;
+
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        e.preventDefault();
+        
+        // Update active state
+        filterLinks.forEach(l => l.classList.remove('w--current'));
+        link.classList.add('w--current');
+
+        // Smooth scroll to target
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+};
+
+// ============================================
+// 導航點 (Navigation Dots)
+// ============================================
+const initWorkNavigationDots = () => {
+  const dots = Array.from(document.querySelectorAll('.nav-line .nav-dot'));
+  if (!dots.length) return;
+
+  // Find all project items or sections to track
+  const projectItems = Array.from(
+    document.querySelectorAll('.project-item, .works-item, [data-nav-section]')
+  );
+
+  if (!projectItems.length) return;
+
+  // Limit dots to match available items
+  const count = Math.min(dots.length, projectItems.length);
+  const activeDots = dots.slice(0, count);
+  const activeItems = projectItems.slice(0, count);
+
+  let ticking = false;
+
+  // Function to update active dot based on scroll position
+  const updateActiveDot = () => {
+    const scrollPosition = window.scrollY + window.innerHeight / 2;
+
+    let activeIndex = 0;
+    for (let i = 0; i < activeItems.length; i++) {
+      const item = activeItems[i];
+      const rect = item.getBoundingClientRect();
+      const itemTop = rect.top + window.scrollY;
+      const itemBottom = itemTop + rect.height;
+
+      if (scrollPosition >= itemTop && scrollPosition < itemBottom) {
+        activeIndex = i;
+        break;
+      }
+    }
+
+    // Update dot active state
+    activeDots.forEach((dot, i) => {
+      if (i === activeIndex) {
+        dot.classList.add('is-active');
+      } else {
+        dot.classList.remove('is-active');
+      }
+    });
+
+    ticking = false;
+  };
+
+  // Throttled scroll handler
+  const onScroll = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateActiveDot);
+      ticking = true;
+    }
+  };
+
+  // Click handler for dots
+  activeDots.forEach((dot, i) => {
+    dot.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (activeItems[i]) {
+        activeItems[i].scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Initialize
+  window.addEventListener('scroll', onScroll, { passive: true });
+  updateActiveDot();
+};
+
+// ============================================
 // Auto-initialize on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', initWorkMobileHorizontalScroll);
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  initWorkMobileHorizontalScroll();
+  initWorkFilterNavigation();
+  initWorkNavigationDots();
+});
