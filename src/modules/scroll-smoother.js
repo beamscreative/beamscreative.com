@@ -1,3 +1,10 @@
+/**
+ * ScrollSmoother Module
+ * 統一管理 GSAP ScrollSmoother 實例，響應式處理桌面/手機版
+ * 
+ * 依賴: GSAP, ScrollTrigger, ScrollSmoother (透過 CDN 載入)
+ */
+
 const DEFAULT_OPTIONS = {
   wrapperSelector: '.smooth-wrapper',
   contentSelector: '.smooth-content',
@@ -25,6 +32,11 @@ const ensurePlugins = () => {
   return true;
 };
 
+/**
+ * 初始化響應式 ScrollSmoother
+ * @param {Object} options - 配置選項
+ * @returns {ScrollSmoother|null} ScrollSmoother 實例或 null
+ */
 export const initResponsiveScrollSmoother = (options = {}) => {
   lastOptions = { ...DEFAULT_OPTIONS, ...options };
   const { breakpoint, wrapperSelector, contentSelector, smooth, effects, normalizeScroll } = lastOptions;
@@ -58,6 +70,10 @@ export const initResponsiveScrollSmoother = (options = {}) => {
   return smoother;
 };
 
+/**
+ * 取得當前 ScrollSmoother 實例
+ * @returns {ScrollSmoother|null}
+ */
 export const getScrollSmoother = () => {
   if (window.ScrollSmoother && window.ScrollSmoother.get) {
     return window.ScrollSmoother.get();
@@ -65,6 +81,10 @@ export const getScrollSmoother = () => {
   return smoother;
 };
 
+/**
+ * 暫停/恢復 ScrollSmoother
+ * @param {boolean} paused - true 暫停, false 恢復
+ */
 export const pauseScrollSmoother = (paused) => {
   const instance = getScrollSmoother();
   if (instance) instance.paused(Boolean(paused));

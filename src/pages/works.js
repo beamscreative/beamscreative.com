@@ -1,4 +1,13 @@
-export const initWorkMobileHorizontalScroll = () => {
+/**
+ * Works Page Script
+ * Page ID: 654dddb7fac1a92339fe4eae
+ * Path: /works
+ * 
+ * 功能: 手機版水平滾動 snap
+ * 依賴: 無額外依賴
+ */
+
+const initWorkMobileHorizontalScroll = () => {
   const isMobile = window.matchMedia('(max-width: 767px)').matches;
   if (!isMobile) return;
 
@@ -104,4 +113,5 @@ export const initWorkMobileHorizontalScroll = () => {
   });
 };
 
+// Auto-initialize on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', initWorkMobileHorizontalScroll);
