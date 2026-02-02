@@ -3,9 +3,11 @@
  * Page ID: 654dddb7fac1a92339fe4ea0
  * Path: /
  * 
- * 功能: Hero 輪播、桌面點擊切換、手機滾動觸發
- * 依賴: GSAP, ScrollTrigger (透過 CDN 載入)
+ * 功能: ScrollSmoother (desktop only), Hero 輪播、桌面點擊切換、手機滾動觸發
+ * 依賴: GSAP, ScrollTrigger, ScrollSmoother (透過 CDN 載入)
  */
+
+import { initResponsiveScrollSmoother } from '../modules/scroll-smoother.js';
 
 const initHeroProject = () => {
   const wrapper = document.querySelector('.hero-project-wrapper');
@@ -186,4 +188,12 @@ const initHeroProject = () => {
 };
 
 // Auto-initialize on DOMContentLoaded
-document.addEventListener("DOMContentLoaded", initHeroProject);
+document.addEventListener("DOMContentLoaded", () => {
+  // ScrollSmoother 響應式控制 (僅 desktop 啟用)
+  initResponsiveScrollSmoother();
+  
+  // Hero 輪播功能
+  initHeroProject();
+  
+  console.log('[BEAMS] Home page initialized');
+});

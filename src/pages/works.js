@@ -3,22 +3,20 @@
  * Page ID: 654dddb7fac1a92339fe4eae
  * Path: /works
  * 
- * 功能: 手機版水平滾動 snap, 分類篩選, 導航點
- * 依賴: 無額外依賴
+ * 功能: ScrollSmoother (desktop only), 手機版水平滾動 snap, 分類篩選, 導航點
+ * 依賴: GSAP, ScrollTrigger, ScrollSmoother (透過 CDN 載入)
  */
+
+import { initResponsiveScrollSmoother, getScrollSmoother } from '../modules/scroll-smoother.js';
+
+const TABLET_BREAKPOINT = 991;
+const TRIGGER_OFFSET = 60; // 觸發距離頂部的像素
 
 // ============================================
 // 手機版水平滾動 snap
 // ============================================
 const initWorkMobileHorizontalScroll = () => {
-  // #region agent log
-  console.log('[DEBUG] initWorkMobileHorizontalScroll called');
-  // #endregion
-  
   const isMobile = window.matchMedia('(max-width: 767px)').matches;
-  // #region agent log
-  console.log('[DEBUG] isMobile:', isMobile);
-  // #endregion
   if (!isMobile) return;
 
   const list =
@@ -69,7 +67,6 @@ const initWorkMobileHorizontalScroll = () => {
     setActive(closest);
   };
 
-  // Initial active state
   setActive(items[0]);
 
   list.addEventListener(
@@ -90,32 +87,20 @@ const initWorkMobileHorizontalScroll = () => {
     { passive: true }
   );
 
-  list.addEventListener(
-    'touchstart',
-    () => {
-      isPointerDown = true;
-      clearTimeout(scrollTimeout);
-    },
-    { passive: true }
-  );
+  list.addEventListener('touchstart', () => {
+    isPointerDown = true;
+    clearTimeout(scrollTimeout);
+  }, { passive: true });
 
-  list.addEventListener(
-    'touchend',
-    () => {
-      isPointerDown = false;
-      snapToClosest();
-    },
-    { passive: true }
-  );
+  list.addEventListener('touchend', () => {
+    isPointerDown = false;
+    snapToClosest();
+  }, { passive: true });
 
-  list.addEventListener(
-    'touchcancel',
-    () => {
-      isPointerDown = false;
-      snapToClosest();
-    },
-    { passive: true }
-  );
+  list.addEventListener('touchcancel', () => {
+    isPointerDown = false;
+    snapToClosest();
+  }, { passive: true });
 
   window.addEventListener('resize', () => {
     clearTimeout(scrollTimeout);
@@ -127,21 +112,12 @@ const initWorkMobileHorizontalScroll = () => {
 // 分類篩選 Smooth Scroll
 // ============================================
 const initWorkFilterNavigation = () => {
-  // #region agent log
-  console.log('[DEBUG] initWorkFilterNavigation called');
-  // #endregion
-  
-  // Find filter links - they might be in various structures
   const filterLinks = Array.from(
     document.querySelectorAll('a[href*="#"]')
   ).filter(link => {
     const href = link.getAttribute('href');
     return href && href.startsWith('#') && href.length > 1;
   });
-
-  // #region agent log
-  console.log('[DEBUG] Filter links found:', filterLinks.length, filterLinks.map(l => l.getAttribute('href')));
-  // #endregion
 
   if (!filterLinks.length) return;
 
@@ -153,22 +129,22 @@ const initWorkFilterNavigation = () => {
       const targetId = href.substring(1);
       const targetElement = document.getElementById(targetId);
 
-      // #region agent log
-      console.log('[DEBUG] Filter link clicked:', href, 'Target found:', !!targetElement);
-      // #endregion
-
       if (targetElement) {
         e.preventDefault();
         
-        // Update active state
         filterLinks.forEach(l => l.classList.remove('w--current'));
         link.classList.add('w--current');
 
-        // Smooth scroll to target
-        targetElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
+        // 使用 ScrollSmoother 滾動（如果存在）
+        const smoother = getScrollSmoother();
+        if (smoother) {
+          smoother.scrollTo(targetElement, true);
+        } else {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
       }
     });
   });
@@ -176,77 +152,122 @@ const initWorkFilterNavigation = () => {
 
 // ============================================
 // 導航點 (Navigation Dots)
+// Desktop only - 桌面版專用
 // ============================================
 const initWorkNavigationDots = () => {
-  // #region agent log
-  console.log('[DEBUG] initWorkNavigationDots called');
-  // #endregion
-  
-  const dots = Array.from(document.querySelectorAll('.nav-line .nav-dot'));
-  
-  // #region agent log
-  console.log('[DEBUG] Nav dots found:', dots.length);
-  // #endregion
-  
-  if (!dots.length) {
-    // #region agent log
-    console.log('[DEBUG] No nav dots found, exiting');
-    // #endregion
-    return;
-  }
+  // 僅在桌面版啟用
+  if (window.innerWidth <= TABLET_BREAKPOINT) return;
 
-  // Find all project items or sections to track
+  const navLine = document.querySelector('.nav-line');
+  if (!navLine) return;
+
+  // 取得所有 project-item
   const projectItems = Array.from(
-    document.querySelectorAll('.project-item, .works-item, [data-nav-section]')
+    document.querySelectorAll('.project-item')
   );
 
-  // #region agent log
-  console.log('[DEBUG] Project items found:', projectItems.length);
-  // #endregion
+  if (!projectItems.length) return;
 
-  if (!projectItems.length) {
-    // #region agent log
-    console.log('[DEBUG] No project items found, exiting');
-    // #endregion
-    return;
+  // 動態建立與 project-item 數量對應的 nav-dot
+  const existingDots = Array.from(navLine.querySelectorAll('.nav-dot'));
+  const itemCount = projectItems.length;
+  
+  // 調整 nav-dot 數量
+  if (existingDots.length < itemCount) {
+    // 需要新增 nav-dot
+    for (let i = existingDots.length; i < itemCount; i++) {
+      const newDot = existingDots[0]?.cloneNode(true) || document.createElement('div');
+      newDot.className = 'nav-dot';
+      newDot.classList.remove('is-active');
+      navLine.appendChild(newDot);
+    }
+  } else if (existingDots.length > itemCount) {
+    // 需要移除多餘的 nav-dot
+    for (let i = existingDots.length - 1; i >= itemCount; i--) {
+      existingDots[i].remove();
+    }
   }
 
-  // Limit dots to match available items
-  const count = Math.min(dots.length, projectItems.length);
-  const activeDots = dots.slice(0, count);
-  const activeItems = projectItems.slice(0, count);
-
+  // 重新取得所有 nav-dot
+  const dots = Array.from(navLine.querySelectorAll('.nav-dot'));
+  
   let ticking = false;
+  let currentActiveIndex = -1;
 
-  // Function to update active dot based on scroll position
-  const updateActiveDot = () => {
-    const scrollPosition = window.scrollY + window.innerHeight / 2;
-
-    let activeIndex = 0;
-    for (let i = 0; i < activeItems.length; i++) {
-      const item = activeItems[i];
+  /**
+   * 計算項目觸發閾值
+   * 處理最後幾個無法達到 60px 觸發點的項目
+   */
+  const calculateTriggerThresholds = () => {
+    const viewportHeight = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+    const maxScroll = docHeight - viewportHeight;
+    
+    const thresholds = [];
+    
+    projectItems.forEach((item, index) => {
       const rect = item.getBoundingClientRect();
-      const itemTop = rect.top + window.scrollY;
-      const itemBottom = itemTop + rect.height;
+      const itemTop = window.scrollY + rect.top;
+      // 理想觸發位置：項目頂部距離視窗頂部 60px
+      const idealTriggerScroll = itemTop - TRIGGER_OFFSET;
+      thresholds.push({
+        index,
+        idealScroll: idealTriggerScroll,
+        itemTop,
+        reachable: idealTriggerScroll <= maxScroll
+      });
+    });
 
-      if (scrollPosition >= itemTop && scrollPosition < itemBottom) {
-        activeIndex = i;
+    // 找出最後一個可達的項目索引
+    let lastReachableIndex = -1;
+    for (let i = thresholds.length - 1; i >= 0; i--) {
+      if (thresholds[i].reachable) {
+        lastReachableIndex = i;
         break;
       }
     }
 
-    // #region agent log
-    console.log('[DEBUG] updateActiveDot - scrollPos:', scrollPosition, 'activeIndex:', activeIndex, 'totalItems:', activeItems.length);
-    // #endregion
+    // 如果有不可達的項目，重新計算它們的觸發閾值
+    if (lastReachableIndex < thresholds.length - 1 && lastReachableIndex >= 0) {
+      const lastReachableScroll = thresholds[lastReachableIndex].idealScroll;
+      const unreachableCount = thresholds.length - lastReachableIndex - 1;
+      const remainingScroll = maxScroll - lastReachableScroll;
+      const step = remainingScroll / (unreachableCount + 1);
 
-    // Update dot active state
-    activeDots.forEach((dot, i) => {
-      if (i === activeIndex) {
-        dot.classList.add('is-active');
-      } else {
-        dot.classList.remove('is-active');
+      for (let i = lastReachableIndex + 1; i < thresholds.length; i++) {
+        const offset = i - lastReachableIndex;
+        thresholds[i].adjustedScroll = lastReachableScroll + (step * offset);
       }
-    });
+    }
+
+    return thresholds;
+  };
+
+  // 更新 active dot
+  const updateActiveDot = () => {
+    const scrollY = window.scrollY;
+    const thresholds = calculateTriggerThresholds();
+    
+    let activeIndex = 0;
+    
+    for (let i = 0; i < thresholds.length; i++) {
+      const threshold = thresholds[i];
+      const triggerScroll = threshold.reachable 
+        ? threshold.idealScroll 
+        : (threshold.adjustedScroll ?? threshold.idealScroll);
+      
+      if (scrollY >= triggerScroll) {
+        activeIndex = i;
+      }
+    }
+
+    // 只在 activeIndex 改變時更新 DOM
+    if (activeIndex !== currentActiveIndex) {
+      currentActiveIndex = activeIndex;
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('is-active', i === activeIndex);
+      });
+    }
 
     ticking = false;
   };
@@ -259,43 +280,64 @@ const initWorkNavigationDots = () => {
     }
   };
 
-  // Click handler for dots
-  activeDots.forEach((dot, i) => {
+  // 點擊 dot 滾動到對應項目
+  dots.forEach((dot, i) => {
     dot.addEventListener('click', (e) => {
       e.preventDefault();
-      if (activeItems[i]) {
-        activeItems[i].scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
+      const item = projectItems[i];
+      if (!item) return;
+
+      const smoother = getScrollSmoother();
+      if (smoother) {
+        // 使用 ScrollSmoother 滾動
+        smoother.scrollTo(item, true, `top ${TRIGGER_OFFSET}px`);
+      } else {
+        // Fallback
+        const rect = item.getBoundingClientRect();
+        const targetY = window.scrollY + rect.top - TRIGGER_OFFSET;
+        window.scrollTo({
+          top: targetY,
+          behavior: 'smooth'
         });
       }
     });
   });
 
-  // Initialize
+  // 初始化
   window.addEventListener('scroll', onScroll, { passive: true });
-  updateActiveDot();
+  
+  // 延遲初始更新以確保 layout 穩定
+  requestAnimationFrame(() => {
+    updateActiveDot();
+  });
+
+  // 視窗 resize 時重新計算
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      // 重新檢查是否為桌面版
+      if (window.innerWidth <= TABLET_BREAKPOINT) {
+        // 移除 is-active 狀態
+        dots.forEach(dot => dot.classList.remove('is-active'));
+      } else {
+        updateActiveDot();
+      }
+    }, 150);
+  });
 };
 
 // ============================================
 // Auto-initialize on DOMContentLoaded
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-  // #region agent log
-  console.log('[DEBUG] DOMContentLoaded fired - works.js initializing');
-  // #endregion
+  // ScrollSmoother 響應式控制 (僅 desktop 啟用)
+  initResponsiveScrollSmoother();
+
+  // 初始化各功能
+  initWorkMobileHorizontalScroll();
+  initWorkFilterNavigation();
+  initWorkNavigationDots();
   
-  try {
-    initWorkMobileHorizontalScroll();
-    initWorkFilterNavigation();
-    initWorkNavigationDots();
-    
-    // #region agent log
-    console.log('[DEBUG] All init functions completed successfully');
-    // #endregion
-  } catch (error) {
-    // #region agent log
-    console.error('[DEBUG] Error in init functions:', error.message, error.stack);
-    // #endregion
-  }
+  console.log('[BEAMS] Works page initialized');
 });

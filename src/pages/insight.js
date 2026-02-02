@@ -3,13 +3,16 @@
  * Page ID: 69088d9226e4a435f5e21c9e
  * Path: /insight
  * 
- * 功能: Insight 列表頁面
- * 依賴: 無額外依賴
+ * 功能: ScrollSmoother (desktop only), Insight 列表頁面
+ * 依賴: GSAP, ScrollTrigger, ScrollSmoother (透過 CDN 載入)
  */
 
+import { initResponsiveScrollSmoother } from '../modules/scroll-smoother.js';
+
 const initInsight = () => {
-  // 目前此頁面只需要 global.js 的功能
-  // 如有需要可在此添加 insight 特定功能
+  // ScrollSmoother 響應式控制 (僅 desktop 啟用)
+  initResponsiveScrollSmoother();
+  
   console.log('[BEAMS] Insight page initialized');
 };
 
