@@ -328,6 +328,24 @@ const initWorkNavigationDots = () => {
 };
 
 // ============================================
+// Project Thumb Hover — 原色覆蓋層
+// ============================================
+const initProjectThumbHover = () => {
+  document.querySelectorAll('.project-thumb-wrapper').forEach(wrapper => {
+    const img = wrapper.querySelector('.project-thumb-img');
+    // 跳過已注入過的 wrapper，避免重複
+    if (!img || wrapper.querySelector('.project-thumb-img--color')) return;
+
+    // 複製圖片作為全彩覆蓋層（mix-blend-mode: normal, filter: none 由 CSS 控制）
+    const colorImg = img.cloneNode(true);
+    colorImg.classList.add('project-thumb-img--color');
+    colorImg.removeAttribute('loading');
+    colorImg.setAttribute('aria-hidden', 'true');
+    wrapper.appendChild(colorImg);
+  });
+};
+
+// ============================================
 // Auto-initialize on DOMContentLoaded
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -338,6 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initWorkMobileHorizontalScroll();
   initWorkFilterNavigation();
   initWorkNavigationDots();
+  initProjectThumbHover();
   
   console.log('[BEAMS] Works page initialized');
 });
