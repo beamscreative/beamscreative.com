@@ -7,7 +7,6 @@
  * 依賴: GSAP, ScrollTrigger, ScrollSmoother (透過 CDN 載入)
  */
 
-import { initResponsiveScrollSmoother } from '../modules/scroll-smoother.js';
 
 const initHeroProject = () => {
   const wrapper = document.querySelector('.hero-project-wrapper');
@@ -189,9 +188,6 @@ const initHeroProject = () => {
 
 // Auto-initialize on DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
-  // ScrollSmoother 響應式控制 (僅 desktop 啟用)
-  initResponsiveScrollSmoother();
-  
   // Hero 輪播功能
   initHeroProject();
   
