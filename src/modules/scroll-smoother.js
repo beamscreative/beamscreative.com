@@ -46,6 +46,10 @@ export const initResponsiveScrollSmoother = (options = {}) => {
   const isDesktop = window.innerWidth > breakpoint;
 
   if (isDesktop && !smoother) {
+    if (!document.querySelector(contentSelector)) {
+      console.warn(`[BEAMS] ScrollSmoother: content element "${contentSelector}" not found, skipping init`);
+      return null;
+    }
     smoother = ScrollSmoother.create({
       wrapper: wrapperSelector,
       content: contentSelector,

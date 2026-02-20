@@ -3,10 +3,9 @@
  * Page ID: 654dddb7fac1a92339fe4ea0
  * Path: /
  * 
- * 功能: ScrollSmoother (desktop only), Hero 輪播、桌面點擊切換、手機滾動觸發
- * 依賴: GSAP, ScrollTrigger, ScrollSmoother (透過 CDN 載入)
+ * 功能: Hero 輪播、桌面點擊切換、手機滾動觸發
+ * 依賴: GSAP, ScrollTrigger (透過 CDN 載入)
  */
-
 
 const initHeroProject = () => {
   const wrapper = document.querySelector('.hero-project-wrapper');

@@ -53,7 +53,7 @@ beamscreative.com/
 
 | Page | Page ID | Path | Script | ScrollSmoother | 功能 |
 |------|---------|------|--------|----------------|------|
-| Home | `654dddb7fac1a92339fe4ea0` | `/` | `home.min.js` | ✓ Desktop | Hero 輪播、ScrollTrigger |
+| Home | `654dddb7fac1a92339fe4ea0` | `/` | `home.min.js` | ✗ | Hero 輪播、ScrollTrigger |
 | Works | `654dddb7fac1a92339fe4eae` | `/works` | `works.min.js` | ✓ Desktop | 手機水平滾動、nav-line 導航點 |
 | Works Template | `654dddb7fac1a92339fe4ea8` | `/works/[slug]` | `works-detail.min.js` | ✓ Desktop | Lightbox、Reader popup |
 | Works-categories | `654dddb7fac1a92339fe4ea9` | `/works-categories/[slug]` | `works-category.min.js` | ✓ Desktop | nav-line 導航點 |
