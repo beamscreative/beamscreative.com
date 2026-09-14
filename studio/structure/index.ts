@@ -1,3 +1,4 @@
+import { CogIcon } from '@sanity/icons/Cog'
 import { DocumentPdfIcon } from '@sanity/icons/DocumentPdf'
 import { EnvelopeIcon } from '@sanity/icons/Envelope'
 import { ImagesIcon } from '@sanity/icons/Images'
@@ -28,6 +29,11 @@ export const structure: StructureResolver = (S) =>
             .documentId('portfolioDownload')
             .title('Portfolio download'),
         ),
+      S.divider(),
+      S.listItem()
+        .title('Site settings')
+        .icon(CogIcon)
+        .child(S.document().schemaType('siteSettings').documentId('siteSettings').title('Site settings')),
       S.divider(),
       S.listItem()
         .title('Profile leads')

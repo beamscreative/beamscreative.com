@@ -58,6 +58,38 @@ const QUERY = `{
     enabled,
     label,
     file{ asset->{_id, url, originalFilename} }
+  },
+  "siteSettings": *[_id == "siteSettings"][0]{
+    googleAnalyticsId,
+    metaPixelId,
+    copyright,
+    seo{
+      title,
+      description,
+      image{
+        asset->{_id, url, metadata{lqip, dimensions{width, height}}},
+        hotspot,
+        crop
+      }
+    },
+    contact{
+      whatsappUrl,
+      instagramUrl,
+      email
+    },
+    about{
+      kicker,
+      body,
+      facts[]{ label, value }
+    },
+    profileGate{
+      title,
+      description,
+      emailPlaceholder,
+      submitLabel,
+      thankYouTitle,
+      previewLabel
+    }
   }
 }`
 
@@ -88,6 +120,11 @@ function hasAsset(image) {
   return Boolean(image?.asset?._id || image?.asset?._ref)
 }
 
+function pickText(value, fallback = '') {
+  const text = String(value ?? '').trim()
+  return text || fallback
+}
+
 function toSite(data) {
   const fallback = readFallback()
   const slider = data?.homeSlider
@@ -100,6 +137,22 @@ function toSite(data) {
 
   const popup = data?.portfolioPopup || {}
   const popupItems = (popup.items || []).filter((item) => hasAsset(item?.image))
+  const settings = data?.siteSettings || {}
+  const seo = settings.seo || {}
+  const fallbackSettings = fallback.siteSettings || {}
+  const fallbackSeo = fallbackSettings.seo || {}
+  const fallbackContact = fallbackSettings.contact || {}
+  const fallbackAbout = fallbackSettings.about || {}
+  const fallbackGate = fallbackSettings.profileGate || {}
+  const aboutFacts = Array.isArray(settings.about?.facts)
+    ? settings.about.facts
+        .map((fact) => ({
+          label: pickText(fact?.label),
+          value: pickText(fact?.value),
+        }))
+        .filter((fact) => fact.label && fact.value)
+    : []
+  const download = data?.portfolioDownload || {}
 
   return {
     fadeDuration: Number(slider?.fadeDuration ?? fallback.fadeDuration),
@@ -110,7 +163,39 @@ function toSite(data) {
       // The popup always has pages: CMS pages when supplied, otherwise the committed profile.
       items: popup.enabled && popupItems.length ? popupItems : fallback.portfolioPopup.items,
     },
-    portfolioDownload: data?.portfolioDownload || fallback.portfolioDownload,
+    portfolioDownload: {
+      ...fallback.portfolioDownload,
+      ...download,
+      label: pickText(download.label, fallback.portfolioDownload?.label || 'DOWNLOAD'),
+    },
+    siteSettings: {
+      googleAnalyticsId: pickText(settings.googleAnalyticsId, fallbackSettings.googleAnalyticsId),
+      metaPixelId: pickText(settings.metaPixelId, fallbackSettings.metaPixelId),
+      copyright: pickText(settings.copyright, fallbackSettings.copyright),
+      seo: {
+        title: pickText(seo.title, fallbackSeo.title),
+        description: pickText(seo.description, fallbackSeo.description),
+        image: hasAsset(seo.image) ? seo.image : fallbackSeo.image || null,
+      },
+      contact: {
+        whatsappUrl: pickText(settings.contact?.whatsappUrl, fallbackContact.whatsappUrl),
+        instagramUrl: pickText(settings.contact?.instagramUrl, fallbackContact.instagramUrl),
+        email: pickText(settings.contact?.email, fallbackContact.email),
+      },
+      about: {
+        kicker: pickText(settings.about?.kicker, fallbackAbout.kicker),
+        body: pickText(settings.about?.body, fallbackAbout.body),
+        facts: aboutFacts.length ? aboutFacts : fallbackAbout.facts || [],
+      },
+      profileGate: {
+        title: pickText(settings.profileGate?.title, fallbackGate.title),
+        description: pickText(settings.profileGate?.description, fallbackGate.description),
+        emailPlaceholder: pickText(settings.profileGate?.emailPlaceholder, fallbackGate.emailPlaceholder),
+        submitLabel: pickText(settings.profileGate?.submitLabel, fallbackGate.submitLabel),
+        thankYouTitle: pickText(settings.profileGate?.thankYouTitle, fallbackGate.thankYouTitle),
+        previewLabel: pickText(settings.profileGate?.previewLabel, fallbackGate.previewLabel),
+      },
+    },
   }
 }
 

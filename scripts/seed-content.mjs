@@ -100,4 +100,44 @@ await client.createOrReplace({
   label: 'Download portfolio',
 })
 
-console.log('Seeded homeSlider, portfolioPopup, and portfolioDownload')
+await client.createOrReplace({
+  _id: 'siteSettings',
+  _type: 'siteSettings',
+  googleAnalyticsId: 'G-50YR6SF7F9',
+  metaPixelId: '168718217394737',
+  copyright: '©2026 BEAMS Creative Ltd. All rights reserved',
+  seo: {
+    _type: 'seo',
+    title: 'BEAMS Creative | Spatial & Interior Design Studio in Hong Kong',
+    description:
+      'BEAMS Creative is a Hong Kong spatial design studio specializing in interiors, retail, exhibitions, pop-ups, and installations. Built Environments At Minimal and Sustainable — based at PMQ, Central.',
+  },
+  contact: {
+    _type: 'contactLinks',
+    whatsappUrl: 'https://wa.me/85292458159',
+    instagramUrl: 'https://www.instagram.com/beams.creative/',
+    email: 'hello@beamscreative.com',
+  },
+  about: {
+    _type: 'aboutPanel',
+    kicker: 'STUDIO NOTE',
+    facts: [
+      { _key: 'studio', _type: 'aboutFact', label: 'STUDIO', value: 'STUDIO BEAMS CREATIVE' },
+      { _key: 'focus', _type: 'aboutFact', label: 'FOCUS', value: 'RESIDENTIAL · COMMERCIAL' },
+      { _key: 'discipline', _type: 'aboutFact', label: 'DISCIPLINE', value: 'INTERIOR ARCHITECTURE' },
+      { _key: 'location', _type: 'aboutFact', label: 'LOCATION', value: 'HONG KONG · DETROIT' },
+    ],
+    body: 'BEAMS Creative is an interior architecture studio working on residential, hospitality, and commercial spaces across Asia Pacific and America. Our goal is to create spaces that are considered and presented as a study in restraint. We start every project on site, reading the light, the structure, and what\'s already there. With a focus on the human experience, we work closely with our clients to shape concepts free of trends and specific to the site, resulting in spaces that feel like they belong.',
+  },
+  profileGate: {
+    _type: 'profileGate',
+    title: 'WE WOULD LIKE MEET YOU!',
+    description: 'Enter your email to preview or download our company\nprofile and project updates.',
+    emailPlaceholder: 'your@email.com',
+    submitLabel: 'ENTER',
+    thankYouTitle: 'THANK YOU!',
+    previewLabel: 'PREVIEW',
+  },
+})
+
+console.log('Seeded homeSlider, portfolioPopup, portfolioDownload, and siteSettings')

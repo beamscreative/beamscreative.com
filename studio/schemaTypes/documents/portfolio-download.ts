@@ -16,9 +16,10 @@ export const portfolioDownload = defineType({
     }),
     defineField({
       name: 'label',
-      title: 'Label',
+      title: 'Download button label',
       type: 'string',
-      initialValue: 'Download PDF',
+      initialValue: 'DOWNLOAD',
+      description: 'Shown next to Preview after someone enters their email.',
     }),
     defineField({
       name: 'file',

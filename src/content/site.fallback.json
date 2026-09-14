@@ -45,6 +45,40 @@
     ]
   },
   "portfolioDownload": {
-    "enabled": false
+    "enabled": false,
+    "label": "DOWNLOAD"
+  },
+  "siteSettings": {
+    "googleAnalyticsId": "G-50YR6SF7F9",
+    "metaPixelId": "168718217394737",
+    "seo": {
+      "title": "BEAMS Creative | Spatial & Interior Design Studio in Hong Kong",
+      "description": "BEAMS Creative is a Hong Kong spatial design studio specializing in interiors, retail, exhibitions, pop-ups, and installations. Built Environments At Minimal and Sustainable — based at PMQ, Central.",
+      "image": { "src": "/og-img.jpg" }
+    },
+    "contact": {
+      "whatsappUrl": "https://wa.me/85292458159",
+      "instagramUrl": "https://www.instagram.com/beams.creative/",
+      "email": "hello@beamscreative.com"
+    },
+    "about": {
+      "kicker": "STUDIO NOTE",
+      "facts": [
+        { "label": "STUDIO", "value": "STUDIO BEAMS CREATIVE" },
+        { "label": "FOCUS", "value": "RESIDENTIAL · COMMERCIAL" },
+        { "label": "DISCIPLINE", "value": "INTERIOR ARCHITECTURE" },
+        { "label": "LOCATION", "value": "HONG KONG · DETROIT" }
+      ],
+      "body": "BEAMS Creative is an interior architecture studio working on residential, hospitality, and commercial spaces across Asia Pacific and America. Our goal is to create spaces that are considered and presented as a study in restraint. We start every project on site, reading the light, the structure, and what's already there. With a focus on the human experience, we work closely with our clients to shape concepts free of trends and specific to the site, resulting in spaces that feel like they belong."
+    },
+    "profileGate": {
+      "title": "WE WOULD LIKE MEET YOU!",
+      "description": "Enter your email to preview or download our company\nprofile and project updates.",
+      "emailPlaceholder": "your@email.com",
+      "submitLabel": "ENTER",
+      "thankYouTitle": "THANK YOU!",
+      "previewLabel": "PREVIEW"
+    },
+    "copyright": "©2026 BEAMS Creative Ltd. All rights reserved"
   }
 }

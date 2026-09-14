@@ -33,7 +33,7 @@ Sanity controls:
 - Home page slider (desktop image, mobile image, per-slide logo colour, fade / hold timing)
 - Portfolio preview pages and the optional PDF download
 
-Hardcoded in `index.html`: social / email links, credit copy, SEO meta, analytics.
+Hardcoded in `index.html`: wordmark assets and structural chrome only. Page copy, contact links, SEO, analytics, about panel, and email gate live in Sanity **Site settings**.
 
 ---
 
