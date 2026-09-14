@@ -1,0 +1,10 @@
+name = "beamscreative"
+compatibility_date = "2026-09-08"
+pages_build_output_dir = "dist"
+
+# Set these in the Cloudflare Pages dashboard as well (build-time env):
+# SANITY_PROJECT_ID=o8sj69wc
+# SANITY_DATASET=production
+# SANITY_API_VERSION=2025-02-19
+# SANITY_API_READ_TOKEN= (only if the dataset is private)
+# SANITY_API_WRITE_TOKEN= (server-side only, for /api/profile-lead)

@@ -21,8 +21,15 @@ npm-debug.log*
 .env.local
 .env.*.local
 
-# Build cache
+# Build output
+dist/
 .cache/
+studio/dist/
+studio/.sanity/
 
-# Note: dist/ is NOT ignored - it needs to be committed for GitHub Pages
-# If using GitHub Actions (recommended), dist/ will be built automatically
+# Generated at build time
+src/content/site.json
+public/images/generated/
+
+# Local-only archives
+archive/

@@ -1,0 +1,50 @@
+{
+  "fadeDuration": 0.8,
+  "holdDuration": 4,
+  "slides": [
+    {
+      "alt": "",
+      "logoTone": "white",
+      "imageDesktop": { "src": "/images/fallback/slide-01-d.avif" },
+      "imageTablet": { "src": "/images/fallback/slide-01-d.avif" },
+      "imageMobile": { "src": "/images/fallback/slide-01-m.avif" }
+    },
+    {
+      "alt": "",
+      "logoTone": "black",
+      "imageDesktop": { "src": "/images/fallback/slide-02-d.avif" },
+      "imageTablet": { "src": "/images/fallback/slide-02-d.avif" },
+      "imageMobile": { "src": "/images/fallback/slide-02-m.avif" }
+    },
+    {
+      "alt": "",
+      "logoTone": "black",
+      "imageDesktop": { "src": "/images/fallback/slide-02-d-1.avif" },
+      "imageTablet": { "src": "/images/fallback/slide-02-d-1.avif" },
+      "imageMobile": { "src": "/images/fallback/slide-03-m.avif" }
+    },
+    {
+      "alt": "",
+      "logoTone": "white",
+      "imageDesktop": { "src": "/images/fallback/slide-03-d.avif" },
+      "imageTablet": { "src": "/images/fallback/slide-03-d.avif" },
+      "imageMobile": { "src": "/images/fallback/slide-04-m.avif" }
+    }
+  ],
+  "portfolioPopup": {
+    "enabled": false,
+    "items": [
+      { "caption": "BEAMS profile — cover", "image": { "src": "/images/portfolio/page-01.webp" } },
+      { "caption": "BEAMS profile — about us", "image": { "src": "/images/portfolio/page-02.webp" } },
+      { "caption": "BEAMS profile — awards & media", "image": { "src": "/images/portfolio/page-03.webp" } },
+      { "caption": "BEAMS profile — clients", "image": { "src": "/images/portfolio/page-04.webp" } },
+      { "caption": "BEAMS profile — Rootdown Cafe & Bar", "image": { "src": "/images/portfolio/page-05.webp" } },
+      { "caption": "BEAMS profile — faux skylight", "image": { "src": "/images/portfolio/page-06.webp" } },
+      { "caption": "BEAMS profile — interior", "image": { "src": "/images/portfolio/page-07.webp" } },
+      { "caption": "BEAMS profile — shopfront", "image": { "src": "/images/portfolio/page-08.webp" } }
+    ]
+  },
+  "portfolioDownload": {
+    "enabled": false
+  }
+}

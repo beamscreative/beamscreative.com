@@ -1,23 +1,34 @@
 {
-  "name": "beamscreative-scripts",
+  "name": "beamscreative.com",
   "version": "1.0.0",
-  "description": "BEAMS Creative - Webflow custom scripts",
+  "private": true,
+  "description": "BEAMS Creative — spatial & interior design studio website",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/fetch-content.mjs",
     "dev": "vite",
-    "build": "node build.js",
-    "preview": "vite preview"
+    "prebuild": "node scripts/fetch-content.mjs",
+    "build": "vite build",
+    "preview": "vite preview",
+    "studio": "npm run dev --prefix studio",
+    "seed": "node scripts/seed-content.mjs"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@sanity/client": "^7.12.0",
+    "@sanity/image-url": "^1.2.0",
+    "gsap": "^3.13.0"
   },
   "devDependencies": {
-    "vite": "^5.4.0",
-    "rollup": "^4.9.0",
-    "@rollup/plugin-terser": "^0.4.0",
-    "@rollup/plugin-node-resolve": "^15.2.0"
+    "vite": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=22.12"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/beamscreative/beamscreative.com"
   },
   "author": "BEAMS Creative",
-  "license": "MIT"
+  "license": "UNLICENSED"
 }

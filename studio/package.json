@@ -1,0 +1,31 @@
+{
+  "name": "beams-creative-studio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sanity Studio for BEAMS Creative",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "keywords": [
+    "sanity"
+  ],
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@sanity/icons": "^5.2.1",
+    "@sanity/vision": "^6.13.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sanity": "^6.13.0",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}
