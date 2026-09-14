@@ -114,22 +114,37 @@ npm run dev
 
 ## Deploy (Cloudflare Pages)
 
-Local Wrangler is not logged in yet, so the first production attach is a dashboard step:
+This is a **Pages** project (`pages_build_output_dir = "dist"`). Do **not** use `wrangler deploy` — that is for Workers and will fail with “Missing entry-point”.
 
-1. Push this repo to GitHub
-2. In Cloudflare Pages: Create project → connect `beamscreative/beamscreative.com`
-3. Build command: `npm run build`
-4. Output directory: `dist`
-5. Node version: `22` (see `.nvmrc`)
-6. Environment variables:
+### Cloudflare dashboard (Git-connected Pages)
+
+1. Build command: `npm run build`
+2. Build output directory: `dist`
+3. Deploy command: leave **empty** (Pages publishes `dist` itself)
+4. Node version: `22` (see `.nvmrc`)
+5. Environment variables (Production + Preview):
    - `SANITY_PROJECT_ID=o8sj69wc`
    - `SANITY_DATASET=production`
    - `SANITY_API_VERSION=2025-02-19`
-   - `SANITY_API_READ_TOKEN` — required for this project (dataset is not public)
-7. Attach `beamscreative.com` and `www.beamscreative.com`
-8. Create a Deploy Hook, then in Sanity: webhook on publish → that hook
+   - `SANITY_API_READ_TOKEN` — required (dataset is not public)
+   - `SANITY_API_WRITE_TOKEN` — required at runtime for `/api/profile-lead`
 
-`wrangler.toml` names the project `beamscreative`.
+If the project uses a custom deploy step instead of native Pages publish, set that command to:
+
+```bash
+npm run deploy
+```
+
+(`npm run deploy` → `wrangler pages deploy`, which reads `wrangler.toml`.)
+
+### Local / CLI deploy
+
+```bash
+npm run build
+npm run deploy
+```
+
+`wrangler.toml` names the project `beamscreative`. Attach `beamscreative.com` and `www.beamscreative.com` in the dashboard, create a Deploy Hook, then point a Sanity publish webhook at that hook.
 
 To retire Webflow after DNS points here: unpublish the Webflow site in the Webflow dashboard, then remove `static.beamscreative.com` if it still serves the old script CDN.
 

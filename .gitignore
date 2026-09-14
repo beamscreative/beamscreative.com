@@ -24,6 +24,7 @@ npm-debug.log*
 # Build output
 dist/
 .cache/
+.wrangler/
 studio/dist/
 studio/.sanity/
 
